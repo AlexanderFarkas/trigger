@@ -4,16 +4,22 @@ import 'access_strategy.dart';
 
 const _expelled = Object();
 
-abstract class BooleanValform<T> {
+abstract class MultiValform<T> {
   @protected
   AccessStrategy get strategy;
 
-  final Map<T, dynamic> _cells = {};
+  final _cells = {};
+  final T? _value;
 
   bool _isSealed;
 
-  BooleanValform() : _isSealed = false;
-  BooleanValform.sealed() : _isSealed = true;
+  MultiValform([T? value])
+      : _value = value,
+        _isSealed = false;
+        
+  MultiValform.sealed()
+      : _value = null,
+        _isSealed = true;
 
   bool get isSealed => _isSealed;
   bool get isNotSealed => !isSealed;
@@ -21,17 +27,33 @@ abstract class BooleanValform<T> {
   /// If owner doesn't have their cell,
   /// they can choose any key and assign it to cell.
   ///
-  /// While owner accesses with initial key, it returns [true]
+  /// While owner accesses with initial key and valform remains [isNotSealed], it returns [_value]
   /// if owner loses the key and tries to peek with different key,
   /// see [AccessStrategy]
-  bool canAccess(dynamic key, {required T owner}) {
-    if (_isSealed) return false;
-    final savedKey = _cells[owner];
+  T? access(key, {required ownerId}) {
+    final isAllowed = _checkValidity(key, ownerId) && !_isSealed;
+    if (T == dynamic && _value == null) {
+      if (isAllowed) {
+        return true as T;
+      } else {
+        return false as T;
+      }
+    } else {
+      if (isAllowed) {
+        return _value;
+      } else {
+        return null;
+      }
+    }
+  }
+
+  bool _checkValidity(key, ownerId) {
+    final savedKey = _cells[ownerId];
     if (savedKey == null) {
-      _cells[owner] = key;
+      _cells[ownerId] = key;
     }
 
-    if (_cells[owner] != key) {
+    if (_cells[ownerId] != key) {
       switch (strategy) {
         case AccessStrategy.reproduce:
           return false;
@@ -39,7 +61,7 @@ abstract class BooleanValform<T> {
           _isSealed = true;
           break;
         case AccessStrategy.expelOnFailure:
-          _cells[owner] = _expelled;
+          _cells[ownerId] = _expelled;
           return false;
       }
     }
@@ -49,7 +71,7 @@ abstract class BooleanValform<T> {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is BooleanValform &&
+        other is MultiValform &&
             runtimeType == other.runtimeType
 
             /// 1) Events not spent are never considered equal to any other,

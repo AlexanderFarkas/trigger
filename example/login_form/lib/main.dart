@@ -56,8 +56,8 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => LoginFormBloc(),
-      child: BlocConsumer<LoginFormBloc, LoginFormState>(
+      create: (_) => SignUpFormBloc(),
+      child: BlocConsumer<SignUpFormBloc, LoginFormState>(
         listener: (context, state) {
           if (state.anyIsNotSealed()) {
             /// Bloc listener is triggered earlier than builder.
@@ -102,7 +102,7 @@ class _LoginFormState extends State<LoginForm> {
                       Expanded(
                         child: OutlinedButton(
                           onPressed: () =>
-                              context.read<LoginFormBloc>().add(InvalidateLoginFormEvent()),
+                              context.read<SignUpFormBloc>().add(InvalidateSignUpFormEvent()),
                           child: const Text("Invalidate"),
                         ),
                       ),
@@ -111,7 +111,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: OutlinedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              context.read<LoginFormBloc>().add(SubmitLoginFormEvent());
+                              context.read<SignUpFormBloc>().add(SubmitSignUpFormEvent());
                             }
                           },
                           child: state.isSubmitting

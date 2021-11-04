@@ -1,24 +1,26 @@
 import 'access_strategy.dart';
-import 'boolean_valform.dart';
+import 'multi_valform.dart';
 
-class VfSeal<T> extends BooleanValform<T> {
-  VfSeal() : super();
+
+
+class VfSeal<T> extends MultiValform<T> {
+  VfSeal([T? value]) : super(value);
   VfSeal.sealed() : super.sealed();
 
   @override
   AccessStrategy get strategy => AccessStrategy.sealOnFailure;
 }
 
-class VfReproduce<T> extends BooleanValform<T> {
-  VfReproduce() : super();
+class VfReproduce<T> extends MultiValform<T> {
+  VfReproduce([T? value]) : super(value);
   VfReproduce.sealed() : super.sealed();
 
   @override
   AccessStrategy get strategy => AccessStrategy.reproduce;
 }
 
-class VfExpell<T> extends BooleanValform<T> {
-  VfExpell() : super();
+class VfExpell<T> extends MultiValform<T> {
+  VfExpell([T? value]) : super(value);
   VfExpell.sealed() : super.sealed();
 
   @override
@@ -26,34 +28,32 @@ class VfExpell<T> extends BooleanValform<T> {
 }
 
 class Vf<T> extends VfSeal<T> {
-  Vf() : super();
+  Vf([T? value]) : super(value);
   Vf.sealed() : super.sealed();
 }
 
-class VfEthemeral<T> {
+class VfEphemeral<T> {
   bool _isSealed;
   final T? _value;
 
-  VfEthemeral([T? value])
+  VfEphemeral(T value)
       : _value = value,
         _isSealed = false;
 
-  VfEthemeral.sealed()
+  VfEphemeral.sealed()
       : _value = null,
         _isSealed = true;
 
   bool get isSealed => _isSealed;
   bool get isNotSealed => !isSealed;
 
-  /// Returns the event state and consumes the event.
-  T? consume() {
-    T? saveState = state;
+  T? access() {
+    T? saveState = _getValue();
     _isSealed = true;
     return saveState;
   }
 
-  /// Returns the event state.
-  T? get state {
+  T? _getValue() {
     if (_isSealed) {
       return null;
     } else {
@@ -64,7 +64,7 @@ class VfEthemeral<T> {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is VfEthemeral &&
+        other is VfEphemeral &&
             runtimeType == other.runtimeType
 
             /// 1) Events not spent are never considered equal to any other,

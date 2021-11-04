@@ -15,7 +15,7 @@ dependencies:
   bloc: ^7.2.1
 
   valform:
-    path: ../
+    path: ../../
 
 dev_dependencies:
   flutter_test:
