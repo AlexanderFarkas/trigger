@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/AlexandrFarkas/valform/master/docs/assets/logo.svg" height="100" alt="Valform" />
+<img src="https://raw.githubusercontent.com/AlexandrFarkas/valform/master/docs/assets/logo_with_name.svg" height="140" alt="Valform" />
 </p>
 
 <!--
