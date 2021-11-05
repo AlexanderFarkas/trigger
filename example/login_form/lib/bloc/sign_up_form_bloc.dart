@@ -17,7 +17,7 @@ class SignUpFormBloc extends Bloc<SignUpFormEvent, LoginFormState> {
       emit(state.copyWith(
         isSubmitting: false,
         invalidateFormVf: VfExpell.sealed(),
-        emailApiErrorVf: VfStrictReproduce("Email already exists"),
+        emailApiErrorVf: VfReproduce("Email already exists"),
       ));
     });
   }

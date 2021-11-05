@@ -1,37 +1,3 @@
-import 'access_strategy.dart';
-import 'multi_valform.dart';
-
-
-
-class VfSeal<T> extends MultiValform<T> {
-  VfSeal([T? value]) : super(value);
-  VfSeal.sealed() : super.sealed();
-
-  @override
-  AccessStrategy get strategy => AccessStrategy.sealOnFailure;
-}
-
-class VfReproduce<T> extends MultiValform<T> {
-  VfReproduce([T? value]) : super(value);
-  VfReproduce.sealed() : super.sealed();
-
-  @override
-  AccessStrategy get strategy => AccessStrategy.reproduce;
-}
-
-class VfExpell<T> extends MultiValform<T> {
-  VfExpell([T? value]) : super(value);
-  VfExpell.sealed() : super.sealed();
-
-  @override
-  AccessStrategy get strategy => AccessStrategy.expelOnFailure;
-}
-
-class Vf<T> extends VfSeal<T> {
-  Vf([T? value]) : super(value);
-  Vf.sealed() : super.sealed();
-}
-
 class VfEphemeral<T> {
   bool _isSealed;
   final T? _value;
