@@ -57,7 +57,7 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SignUpFormBloc(),
-      child: BlocConsumer<SignUpFormBloc, LoginFormState>(
+      child: BlocConsumer<SignUpFormBloc, SignUpFormState>(
         listener: (context, state) {
           if (state.anyIsNotSealed()) {
             /// Bloc listener is triggered earlier than builder.

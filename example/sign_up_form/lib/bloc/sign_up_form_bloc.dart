@@ -5,10 +5,10 @@ import 'package:valform/valform.dart';
 part 'sign_up_form_event.dart';
 part 'sign_up_form_state.dart';
 
-class SignUpFormBloc extends Bloc<SignUpFormEvent, LoginFormState> {
-  SignUpFormBloc() : super(LoginFormState.initialState()) {
+class SignUpFormBloc extends Bloc<SignUpFormEvent, SignUpFormState> {
+  SignUpFormBloc() : super(SignUpFormState.initialState()) {
     on<InvalidateSignUpFormEvent>((event, emit) {
-      emit(state.copyWith(invalidateFormVf: VfExpell()));
+      emit(state.copyWith(invalidateFormVf: VfExpel()));
     });
     on<SubmitSignUpFormEvent>((event, emit) async {
       emit(state.copyWith(isSubmitting: true));
@@ -16,7 +16,7 @@ class SignUpFormBloc extends Bloc<SignUpFormEvent, LoginFormState> {
       await Future.delayed(Duration(seconds: 1));
       emit(state.copyWith(
         isSubmitting: false,
-        invalidateFormVf: VfExpell.sealed(),
+        invalidateFormVf: VfExpel.sealed(),
         emailApiErrorVf: VfReproduce("Email already exists"),
       ));
     });
