@@ -1,5 +1,5 @@
 
-import 'package:valform/src/vf_wrapper.dart';
+import 'package:valform/src/common/vf_wrapper.dart';
 
 import 'seal_impl.dart';
 import 'seal_sealed.dart';

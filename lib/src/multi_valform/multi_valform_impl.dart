@@ -1,7 +1,20 @@
 import 'package:valform/src/multi_valform/multi_valform.dart';
 
-typedef OnInvalidKey = bool Function(
-    dynamic key, dynamic ownerId, Map cells, Function(bool) setIsSealed);
+class InvalidKeyDetails {
+  final dynamic key;
+  final dynamic ownerId;
+  final Map cells;
+  final Function() seal;
+
+  InvalidKeyDetails({
+    required this.key,
+    required this.ownerId,
+    required this.cells,
+    required this.seal,
+  });
+}
+
+typedef OnInvalidKey = void Function(InvalidKeyDetails);
 
 class MultiValformImpl<T> implements MultiValform<T> {
   final _cells = {};
@@ -11,9 +24,11 @@ class MultiValformImpl<T> implements MultiValform<T> {
 
   final OnInvalidKey? _handler;
 
-  MultiValformImpl(OnInvalidKey handler, [T? value])
-      : _handler = handler,
-        _value = value,
+  MultiValformImpl([
+    T? value,
+    OnInvalidKey? handler,
+  ])  : _value = value,
+        _handler = handler,
         _isSealed = false;
 
   @override
@@ -52,18 +67,15 @@ class MultiValformImpl<T> implements MultiValform<T> {
     }
 
     final handler = _handler;
-    if (_cells[ownerId] != key && handler != null) {
-      return handler.call(key, ownerId, _cells, (isSealed) => _isSealed = isSealed);
-      // switch (strategy) {
-      //   case AccessStrategy.reproduce:
-      //     return false;
-      //   case AccessStrategy.sealOnFailure:
-      //     _isSealed = true;
-      //     break;
-      //   case AccessStrategy.expelOnFailure:
-      //     _cells[ownerId] = _expelled;
-      //     return false;
-      // }
+    if (_cells[ownerId] != key) {
+      handler?.call(InvalidKeyDetails(
+        key: key,
+        ownerId: ownerId,
+        cells: _cells,
+        seal: () => _isSealed = true,
+      ));
+
+      return false;
     }
     return !_isSealed;
   }
