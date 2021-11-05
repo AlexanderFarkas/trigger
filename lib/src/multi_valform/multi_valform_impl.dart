@@ -1,27 +1,24 @@
-import 'package:meta/meta.dart';
+import 'package:valform/src/multi_valform/multi_valform.dart';
 
-import 'access_strategy.dart';
+typedef OnInvalidKey = bool Function(
+    dynamic key, dynamic ownerId, Map cells, Function(bool) setIsSealed);
 
-const _expelled = Object();
-
-abstract class MultiValform<T> {
-  @protected
-  AccessStrategy get strategy;
-
+class MultiValformImpl<T> implements MultiValform<T> {
   final _cells = {};
   final T? _value;
 
   bool _isSealed;
 
-  MultiValform([T? value])
-      : _value = value,
-        _isSealed = false;
-        
-  MultiValform.sealed()
-      : _value = null,
-        _isSealed = true;
+  final OnInvalidKey? _handler;
 
+  MultiValformImpl(OnInvalidKey handler, [T? value])
+      : _handler = handler,
+        _value = value,
+        _isSealed = false;
+
+  @override
   bool get isSealed => _isSealed;
+  @override
   bool get isNotSealed => !isSealed;
 
   /// If owner doesn't have their cell,
@@ -30,6 +27,7 @@ abstract class MultiValform<T> {
   /// While owner accesses with initial key and valform remains [isNotSealed], it returns [_value]
   /// if owner loses the key and tries to peek with different key,
   /// see [AccessStrategy]
+  @override
   T? access(key, {required ownerId}) {
     final isAllowed = _checkValidity(key, ownerId) && !_isSealed;
     if (T == dynamic && _value == null) {
@@ -53,17 +51,19 @@ abstract class MultiValform<T> {
       _cells[ownerId] = key;
     }
 
-    if (_cells[ownerId] != key) {
-      switch (strategy) {
-        case AccessStrategy.reproduce:
-          return false;
-        case AccessStrategy.sealOnFailure:
-          _isSealed = true;
-          break;
-        case AccessStrategy.expelOnFailure:
-          _cells[ownerId] = _expelled;
-          return false;
-      }
+    final handler = _handler;
+    if (_cells[ownerId] != key && handler != null) {
+      return handler.call(key, ownerId, _cells, (isSealed) => _isSealed = isSealed);
+      // switch (strategy) {
+      //   case AccessStrategy.reproduce:
+      //     return false;
+      //   case AccessStrategy.sealOnFailure:
+      //     _isSealed = true;
+      //     break;
+      //   case AccessStrategy.expelOnFailure:
+      //     _cells[ownerId] = _expelled;
+      //     return false;
+      // }
     }
     return !_isSealed;
   }
@@ -71,7 +71,7 @@ abstract class MultiValform<T> {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is MultiValform &&
+        other is MultiValformImpl &&
             runtimeType == other.runtimeType
 
             /// 1) Events not spent are never considered equal to any other,

@@ -3,8 +3,9 @@
 /// More dartdocs go here.
 library valform;
 
-export 'src/strict_valforms.dart';
 export 'src/valforms.dart';
-
-export 'src/multi_valform.dart';
 export 'src/valform_mixin.dart';
+export 'src/expell/expell.dart' show VfExpell;
+export 'src/seal/seal.dart' show VfSeal;
+export 'src/reproduce/reproduce.dart' show VfReproduce;
+export 'src/multi_valform/multi_valform.dart';

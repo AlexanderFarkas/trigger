@@ -1,4 +1,4 @@
-import 'package:valform/src/multi_valform.dart';
+import 'package:valform/src/multi_valform/multi_valform.dart';
 
 mixin BooleanValformMixin {
   List<MultiValform> get valforms;

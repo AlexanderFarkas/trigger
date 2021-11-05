@@ -1,7 +1,7 @@
 part of 'sign_up_form_bloc.dart';
 
 class LoginFormState with BooleanValformMixin {
-  final VfStrictReproduce<String> emailApiErrorVf;
+  final VfReproduce<String> emailApiErrorVf;
   final VfExpell invalidateFormVf;
 
   @override
@@ -11,19 +11,17 @@ class LoginFormState with BooleanValformMixin {
 
   LoginFormState({
     required this.isSubmitting,
-    required this.emailApiErrorVf,
-    required this.invalidateFormVf,
+    this.emailApiErrorVf = const VfReproduce.sealed(),
+    this.invalidateFormVf = const VfExpell.sealed(),
   });
 
   factory LoginFormState.initialState() => LoginFormState(
         isSubmitting: false,
-        emailApiErrorVf: VfStrictReproduce.sealed(),
-        invalidateFormVf: VfExpell.sealed(),
       );
 
   LoginFormState copyWith({
     bool? isSubmitting,
-    VfStrictReproduce<String>? emailApiErrorVf,
+    VfReproduce<String>? emailApiErrorVf,
     VfExpell? invalidateFormVf,
   }) {
     return LoginFormState(
