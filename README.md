@@ -15,7 +15,7 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-State management micro-framework that provides utilities for validation and side-effects reactions.
+Boilerplate-free micro-framework that provides utilities for validation and side-effects reactions.
 
 ## Features
 
