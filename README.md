@@ -15,7 +15,7 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-Valform - is a Flutter state management micro-framework. 
+Valform - is a Flutter state management micro-framework. <br>
 It provides utilities for validation and side-effects reactions.
 
 ## Features
