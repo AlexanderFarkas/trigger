@@ -1,5 +1,5 @@
-import 'package:valform/src/multi_valform/multi_valform_impl.dart';
+import 'package:valform/src/valform/multi_field_valform_impl.dart';
 
-class VfReproduceImpl<T> extends MultiValformImpl<T> {
+class VfReproduceImpl<T> extends MultiFieldValformImpl<T> {
   VfReproduceImpl([T? value]) : super(value);
 }

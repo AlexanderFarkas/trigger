@@ -1,8 +1,8 @@
-import 'package:valform/src/multi_valform/multi_valform.dart';
+import 'package:valform/src/valform/multi_field_valform.dart';
 
-mixin VfSealed<T> implements MultiValform<T> {
+mixin MultiFieldValformSealed<T> implements MultiFieldValform<T> {
   @override
-  access(key, {required ownerId}) {
+  access(key, {required fieldId}) {
     if (T == dynamic) {
       return false as T;
     } else {

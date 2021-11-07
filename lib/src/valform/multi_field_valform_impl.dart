@@ -1,30 +1,32 @@
-import 'package:valform/src/multi_valform/multi_valform.dart';
+import 'package:valform/src/valform/multi_field_valform.dart';
 
 class InvalidKeyDetails {
   final dynamic key;
   final dynamic ownerId;
-  final Map cells;
+  final Map fields;
   final Function() seal;
 
   InvalidKeyDetails({
     required this.key,
     required this.ownerId,
-    required this.cells,
+    required this.fields,
     required this.seal,
   });
 }
 
+const defaultFieldId = Object();
+
 typedef OnInvalidKey = void Function(InvalidKeyDetails);
 
-class MultiValformImpl<T> implements MultiValform<T> {
-  final _cells = {};
+abstract class MultiFieldValformImpl<T> implements MultiFieldValform<T> {
+  final _fields = {};
   final T? _value;
 
   bool _isSealed;
 
   final OnInvalidKey? _handler;
 
-  MultiValformImpl([
+  MultiFieldValformImpl([
     T? value,
     OnInvalidKey? handler,
   ])  : _value = value,
@@ -36,15 +38,9 @@ class MultiValformImpl<T> implements MultiValform<T> {
   @override
   bool get isNotSealed => !isSealed;
 
-  /// If owner doesn't have their cell,
-  /// they can choose any key and assign it to cell.
-  ///
-  /// While owner accesses with initial key and valform remains [isNotSealed], it returns [_value]
-  /// if owner loses the key and tries to peek with different key,
-  /// see [AccessStrategy]
   @override
-  T? access(key, {required ownerId}) {
-    final isAllowed = _checkValidity(key, ownerId) && !_isSealed;
+  T? access(key, {required fieldId}) {
+    final isAllowed = _checkValidity(key, fieldId) && !_isSealed;
     if (T == dynamic && _value == null) {
       if (isAllowed) {
         return true as T;
@@ -61,17 +57,17 @@ class MultiValformImpl<T> implements MultiValform<T> {
   }
 
   bool _checkValidity(key, ownerId) {
-    final savedKey = _cells[ownerId];
+    final savedKey = _fields[ownerId];
     if (savedKey == null) {
-      _cells[ownerId] = key;
+      _fields[ownerId] = key;
     }
 
     final handler = _handler;
-    if (_cells[ownerId] != key) {
+    if (_fields[ownerId] != key) {
       handler?.call(InvalidKeyDetails(
         key: key,
         ownerId: ownerId,
-        cells: _cells,
+        fields: _fields,
         seal: () => _isSealed = true,
       ));
 
@@ -83,12 +79,9 @@ class MultiValformImpl<T> implements MultiValform<T> {
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is MultiValformImpl &&
+        other is MultiFieldValformImpl &&
             runtimeType == other.runtimeType
-
-            /// 1) Events not spent are never considered equal to any other,
-            /// and they will always "fire", forcing the widget to rebuild.
-            /// 2) Spent events are considered "empty", so they are all equal.
+            /// Only sealed valforms are considered equal to each other
             &&
             (isSealed && other.isSealed);
   }

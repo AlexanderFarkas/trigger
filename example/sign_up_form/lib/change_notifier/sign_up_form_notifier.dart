@@ -1,34 +1,29 @@
-part of 'sign_up_form_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:valform/valform.dart';
 
-class SignUpFormState with ValformMixin {
-  final VfReproduce<String> emailApiErrorVf;
-  final MultiVfExpel invalidateFormVf;
+class SignUpFormNotifier extends ChangeNotifier {
+  VfReproduce<String> emailApiErrorVf;
+  MultiVfExpel invalidateFormVf;
 
-  @override
-  List<Valform> get valforms => [emailApiErrorVf, invalidateFormVf];
+  bool isSubmitting = false;
 
-  final bool isSubmitting;
-
-  SignUpFormState({
-    required this.isSubmitting,
+  SignUpFormNotifier({
     this.emailApiErrorVf = const VfReproduce.sealed(),
     this.invalidateFormVf = const MultiVfExpel.sealed(),
   });
 
-  factory SignUpFormState.initialState() => SignUpFormState(
-        isSubmitting: false,
-      );
+  void invalidateForm() {
+    invalidateFormVf = MultiVfExpel();
+    notifyListeners();
+  }
 
-  SignUpFormState copyWith({
-    bool? isSubmitting,
-    VfReproduce<String>? emailApiErrorVf,
-    MultiVfExpel? invalidateFormVf,
-  }) {
-    return SignUpFormState(
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      emailApiErrorVf: emailApiErrorVf ?? this.emailApiErrorVf,
-      invalidateFormVf: invalidateFormVf ?? this.invalidateFormVf,
-    );
+  Future<void> submitForm() async {
+    isSubmitting = true;
+    notifyListeners();
+    await Future.delayed(Duration(seconds: 1));
+    emailApiErrorVf = VfReproduce("Email already exists");
+    isSubmitting = false;
+    notifyListeners();
   }
 
   String? validateEmail(String? email) {

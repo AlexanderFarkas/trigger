@@ -1,7 +1,7 @@
-import 'package:valform/src/multi_valform/multi_valform.dart';
+import 'package:valform/src/valform/valform.dart';
 
-mixin BooleanValformMixin {
-  List<MultiValform> get valforms;
+mixin ValformMixin {
+  List<Valform> get valforms;
 
   bool anyIsNotSealed() => valforms.any((element) => element.isNotSealed);
   bool allSealed() => valforms.every((element) => element.isSealed);

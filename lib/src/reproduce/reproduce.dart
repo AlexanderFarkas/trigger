@@ -1,10 +1,24 @@
-
-import 'package:valform/src/common/vf_wrapper.dart';
+import 'package:valform/src/common/multi_field_valform_sealed.dart';
+import 'package:valform/src/common/multi_field_valform_wrapper.dart';
+import 'package:valform/src/common/single_field_valform_sealed.dart';
+import 'package:valform/src/common/single_field_valform_wrapper.dart';
 
 import 'reproduce_impl.dart';
-import 'reproduce_sealed.dart';
 
-class VfReproduce<T> extends VfWrapper<T> {
+class _MultiSealed<T> with MultiFieldValformSealed<T> implements MultiVfReproduce<T> {
+  const _MultiSealed();
+}
+
+class _SingleSealed<T> with SingleFieldValformSealed<T> implements VfReproduce<T> {
+  const _SingleSealed();
+}
+
+class MultiVfReproduce<T> extends MultiFieldValformWrapper<T> {
+  MultiVfReproduce([T? value]) : super(VfReproduceImpl(value));
+  const factory MultiVfReproduce.sealed() = _MultiSealed;
+}
+
+class VfReproduce<T> extends SingleFieldValformWrapper<T> {
   VfReproduce([T? value]) : super(VfReproduceImpl(value));
-  const factory VfReproduce.sealed() = VfReproduceSealed;
+  const factory VfReproduce.sealed() = _SingleSealed;
 }

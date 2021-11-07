@@ -2,32 +2,82 @@
 <img src="https://raw.githubusercontent.com/AlexandrFarkas/valform/master/docs/assets/logo_with_name.svg" height="140" alt="Valform" />
 </p>
 
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Valform
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+Boilerplate-free Flutter validation micro-framework.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+# <a>Preface</a>
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+- [Why?](#why)
+- [Getting started](#getting_started)
+- [Valform]
+  - Ghbdtn
 
-## Features
+# <a name="why">Why?</a>
+There is no clean and nice way to separate business logic (validation) from presentation.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Why not Formz?
+Formz defies Flutter's way to handle state, forcing user to hold form state entirely in business logic.
 
-## Getting started
+But it can't be done in Flutter. State is inevitably stored in TextEditingControllers. Formatters are applied inside widget itself.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+When I use formz, I always find myself copy-pasting form inputs and struggling with simple use cases.
 
-## Usage
+## Why Valform?
+* Minimalistic.
+* Perfectly fits flutter's form handling system.
+* Your teammates just need to explore a couple of simple concepts.
+
+# <a name="getting_started">Getting started</a>
+
+**Use case**: We want to validate that email doesn't exist in our database. If it does, display error.
+
+For this case I will use `VfReproduce`, because I want to keep an error, if user accidentally enters previously validated email.
+
+```dart
+class LoginFormState extends ChangeNotifier {
+  VfReproduce emailAlreadyExists;
+
+  LoginFormState([
+    this.emailAlreadyExists = const VfReproduce.sealed()
+  ]);
+
+  String? validateEmail(String? email) {
+    if (emailAlreadyExists.access(email)) {
+      return "Email already exists";
+    }
+
+    return null;
+  }
+
+  Future<void> submit() {
+    await Future.delayed(Duration(seconds: 1));
+    emailAlreadyExists = VfReproduce();
+    notifyListeners();
+  }
+}
+```
+Somewhere in Flutter code:
+```dart
+
+final loginFormState = LoginFormState();
+
+void initState() {
+  super.initState();
+  loginFormState.listen(() => setState(() {}));
+}
+
+Widget build(BuildContext context) => Column(
+  children: [
+    TextFormField(
+      validator: loginFormState.validateEmail,
+    ),
+    OutlinedButton(onPressed: loginFormState.submit),
+  ]
+);
+
+```
+## Simple Usage
 
 TODO: Include short and useful examples for package users. Add longer examples
 to `/example` folder.

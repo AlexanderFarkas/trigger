@@ -1,13 +1,13 @@
-import 'package:valform/src/multi_valform/multi_valform_impl.dart';
+import 'package:valform/src/valform/multi_field_valform_impl.dart';
 
 import 'expel.dart';
 
 const _expelled = Object();
 
-class VfExpelImpl<T> extends MultiValformImpl<T> implements VfExpel<T> {
+class VfExpelImpl<T> extends MultiFieldValformImpl<T> implements MultiVfExpel<T> {
   VfExpelImpl([T? value]) : super(value, _onInvalidKey);
 
   static void _onInvalidKey(InvalidKeyDetails details) {
-    details.cells[details.ownerId] = _expelled;
+    details.fields[details.ownerId] = _expelled;
   }
 }

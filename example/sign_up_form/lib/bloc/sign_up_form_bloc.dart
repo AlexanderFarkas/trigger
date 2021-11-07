@@ -8,15 +8,15 @@ part 'sign_up_form_state.dart';
 class SignUpFormBloc extends Bloc<SignUpFormEvent, SignUpFormState> {
   SignUpFormBloc() : super(SignUpFormState.initialState()) {
     on<InvalidateSignUpFormEvent>((event, emit) {
-      emit(state.copyWith(invalidateFormVf: VfExpel()));
+      emit(state.copyWith(invalidateFormVf: MultiVfExpel()));
     });
     on<SubmitSignUpFormEvent>((event, emit) async {
       emit(state.copyWith(isSubmitting: true));
       print("Submitting form...");
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
       emit(state.copyWith(
         isSubmitting: false,
-        invalidateFormVf: VfExpel.sealed(),
+        invalidateFormVf: const MultiVfExpel.sealed(),
         emailApiErrorVf: VfReproduce("Email already exists"),
       ));
     });
