@@ -15,7 +15,8 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-Boilerplate-free state managment micro-framework for validation and side-effects.
+Boilerplate-free form validation library.
+
 
 ## Features
 
