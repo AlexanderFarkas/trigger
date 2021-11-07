@@ -11,19 +11,18 @@ Boilerplate-free form validation library.
 
 - [Why?](#why)
 - [Getting started](#getting_started)
-- [Valform]
-  - Ghbdtn
+
 # <a name="why">Why?</a>
 There is no clean and nice way to separate business logic (validation) from presentation.
 
-## Why not Formz?
+### Why not Formz?
 Formz defies Flutter's way to handle state, forcing user to hold form state entirely in business logic.
 
 But it can't be done in Flutter. State is inevitably stored in TextEditingControllers. Formatters are applied inside widget itself.
 
 When I use formz, I always find myself copy-pasting form inputs and struggling with simple use cases.
 
-## Why Valform?
+### Why Valform?
 * Minimalistic.
 * Perfectly fits flutter's form handling system.
 * Your teammates just need to explore a couple of simple concepts.
