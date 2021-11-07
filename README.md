@@ -4,15 +4,15 @@
 
 # Valform
 
-Boilerplate-free Flutter validation micro-framework.
+Boilerplate-free form validation library.
 
 # <a>Preface</a>
+
 
 - [Why?](#why)
 - [Getting started](#getting_started)
 - [Valform]
   - Ghbdtn
-
 # <a name="why">Why?</a>
 There is no clean and nice way to separate business logic (validation) from presentation.
 
