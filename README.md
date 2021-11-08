@@ -36,12 +36,9 @@ When I use formz, I always find myself copy-pasting form inputs and struggling w
 # <a name="simple_usage">Simple Usage</a>
 
 **Use case**: We want to validate that email doesn't exist in our database. If it does, display error.
-
-For this case I will use `VfReproduce`, because I want to keep an error, if user accidentally enters previously validated email.
-
 ```dart
 class LoginFormState extends ChangeNotifier {
-  VfReproduce _emailAlreadyExists;
+  Vf _emailAlreadyExists;
 
   LoginFormState([
     this._emailAlreadyExists = const VfReproduce.sealed()
@@ -57,7 +54,7 @@ class LoginFormState extends ChangeNotifier {
 
   Future<void> submit() {
     await Future.delayed(Duration(seconds: 1)); // access the database
-    _emailAlreadyExists = VfReproduce();
+    _emailAlreadyExists = Vf();
     notifyListeners();
   }
 }
