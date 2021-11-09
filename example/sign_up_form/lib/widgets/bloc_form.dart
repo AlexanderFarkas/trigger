@@ -29,7 +29,7 @@ class _BlocFormState extends State<BlocForm> {
       create: (_) => SignUpFormBloc(),
       child: BlocConsumer<SignUpFormBloc, SignUpFormState>(
         listener: (context, state) {
-          if (state.anyIsNotSealed()) {
+          if (state.anyTriggerEnabled()) {
             /// Bloc listener is triggered earlier than builder.
             /// If we did this without [addPostFrameCallback],
             /// widgets wouldn't have an actual version of validator functions

@@ -1,16 +1,16 @@
-import 'multi_field_valform.dart';
+import 'base_form_trigger.dart';
 
 class InvalidKeyDetails {
-  final dynamic key;
+  final dynamic fieldValue;
   final dynamic ownerId;
   final Map fields;
-  final Function() seal;
+  final Function() disable;
 
   InvalidKeyDetails({
-    required this.key,
+    required this.fieldValue,
     required this.ownerId,
     required this.fields,
-    required this.seal,
+    required this.disable,
   });
 }
 
@@ -18,30 +18,32 @@ const defaultFieldId = Object();
 
 typedef OnInvalidKey = void Function(InvalidKeyDetails);
 
-abstract class MultiFieldValformImpl<T> implements MultiFieldValform<T> {
-  final _fields = {};
-  final T? _value;
+abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
 
-  bool _isSealed;
+  // Triger value - first value after trigger was enabled
+  final _fieldsToTriggerValue = {};
+  final T? _content;
+
+  bool _isDisabled;
 
   final OnInvalidKey? _handler;
 
-  MultiFieldValformImpl([
-    T? value,
+  FormTriggerImpl([
+    T? content,
     OnInvalidKey? handler,
-  ])  : _value = value,
+  ])  : _content = content,
         _handler = handler,
-        _isSealed = false;
+        _isDisabled = false;
 
   @override
-  bool get isSealed => _isSealed;
+  bool get isDisabled => _isDisabled;
   @override
-  bool get isNotSealed => !isSealed;
+  bool get isEnabled => !isDisabled;
 
   @override
-  T? access(key, {required fieldId}) {
-    final isAllowed = _checkValidity(key, fieldId) && !_isSealed;
-    if (T == dynamic && _value == null) {
+  T? access(fieldValue, {required fieldId}) {
+    final isAllowed = _checkValidity(fieldValue, fieldId) && !_isDisabled;
+    if (T == dynamic && _content == null) {
       if (isAllowed) {
         return true as T;
       } else {
@@ -49,41 +51,41 @@ abstract class MultiFieldValformImpl<T> implements MultiFieldValform<T> {
       }
     } else {
       if (isAllowed) {
-        return _value;
+        return _content;
       } else {
         return null;
       }
     }
   }
 
-  bool _checkValidity(key, ownerId) {
-    final savedKey = _fields[ownerId];
+  bool _checkValidity(fieldValue, fieldId) {
+    final savedKey = _fieldsToTriggerValue[fieldId];
     if (savedKey == null) {
-      _fields[ownerId] = key;
+      _fieldsToTriggerValue[fieldId] = fieldValue;
     }
 
     final handler = _handler;
-    if (_fields[ownerId] != key) {
+    if (_fieldsToTriggerValue[fieldId] != fieldValue) {
       handler?.call(InvalidKeyDetails(
-        key: key,
-        ownerId: ownerId,
-        fields: _fields,
-        seal: () => _isSealed = true,
+        fieldValue: fieldValue,
+        ownerId: fieldId,
+        fields: _fieldsToTriggerValue,
+        disable: () => _isDisabled = true,
       ));
 
       return false;
     }
-    return !_isSealed;
+    return !_isDisabled;
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        other is MultiFieldValformImpl &&
+        other is FormTriggerImpl &&
             runtimeType == other.runtimeType
             /// Only sealed valforms are considered equal to each other
             &&
-            (isSealed && other.isSealed);
+            (isDisabled && other.isDisabled);
   }
 
   /// 1) If two objects are equal according to the equals method, then hashcode of both must

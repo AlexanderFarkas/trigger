@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:trigger/src/valform/multi_field_valform.dart';
+import 'package:trigger/src/trigger/base_form_trigger.dart';
 import 'package:trigger/trigger.dart';
 
 void main() {
@@ -30,14 +30,14 @@ void expellingValform<T>({
   required absence,
   required bool passContentToConstructor,
 }) {
-  MultiVfExpel<T> vf = MultiVfExpel.sealed();
+  InvalidatingFormTrigger<T> vf = InvalidatingFormTrigger.disabled();
   expect(vf.accessAsFirst(), equals(absence));
 
-  vf = MultiVfExpel(passContentToConstructor ? content : null);
+  vf = InvalidatingFormTrigger(passContentToConstructor ? content : null);
   expect(vf.accessAsFirst(), equals(content));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst(), equals(absence));
 
   expect(vf.accessAsSecond(), equals(content));
@@ -48,14 +48,14 @@ void reproduceValform<T>({
   required absence,
   required bool passContentToConstructor,
 }) {
-  MultiVfReproduce<T> vf = MultiVfReproduce.sealed();
+  ReproducingFormTrigger<T> vf = ReproducingFormTrigger.sealed();
   expect(vf.accessAsFirst(), equals(absence));
 
-  vf = MultiVfReproduce(passContentToConstructor ? content : null);
+  vf = ReproducingFormTrigger(passContentToConstructor ? content : null);
   expect(vf.accessAsFirst(), equals(content));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst(), equals(content));
 
   expect(vf.accessAsSecond(), equals(content));
@@ -66,14 +66,14 @@ void sealValform<T>({
   required absence,
   required bool passContentToConstructor,
 }) {
-  MultiVfSeal<T> vf = MultiVfSeal.sealed();
+  DisablingFormTrigger<T> vf = DisablingFormTrigger.disabled();
   expect(vf.accessAsFirst(), equals(absence));
 
-  vf = MultiVfSeal(passContentToConstructor ? content : null);
+  vf = DisablingFormTrigger(passContentToConstructor ? content : null);
   expect(vf.accessAsFirst(), equals(content));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst(), equals(absence));
 
   expect(vf.accessAsSecond(), equals(absence));
@@ -85,18 +85,18 @@ void vf<T>({
   required absence,
   required bool passContentToConstructor,
 }) {
-  Vf<T> vf = Vf.sealed();
+  FieldTrigger<T> vf = FieldTrigger.disabled();
   expect(vf.access("Help"), equals(absence));
 
-  vf = Vf(passContentToConstructor ? content : null);
+  vf = FieldTrigger(passContentToConstructor ? content : null);
   expect(vf.access("Help"), equals(content));
-  expect(vf.isSealed, equals(false));
+  expect(vf.isDisabled, equals(false));
   expect(vf.access("key"), equals(absence));
-  expect(vf.isSealed, equals(true));
+  expect(vf.isDisabled, equals(true));
 }
 
 
-extension MultiValformX<T> on MultiFieldValform<T> {
+extension MultiValformX<T> on BaseFormTrigger<T> {
   accessAsFirst([key = 'key']) => access(key, fieldId: "first");
   accessAsSecond([key = 'key']) => access(key, fieldId: "second");
 }

@@ -3,9 +3,9 @@
 /// More dartdocs go here.
 library trigger;
 
-export 'src/expel/expel.dart' show MultiVfExpel, VfExpel;
-export 'src/reproduce/reproduce.dart' show MultiVfReproduce, VfReproduce;
-export 'src/seal/seal.dart' show MultiVfSeal, VfSeal;
-export 'src/vf/vf.dart' show Vf;
-export 'src/valform/valform.dart' show Valform;
-export 'src/valform_mixin.dart';
+export 'src/invalidating/invalidating.dart' show InvalidatingFormTrigger, InvalidatingFieldTrigger;
+export 'src/reproducing/reproducing.dart' show ReproducingFormTrigger, ReproducingFieldTrigger;
+export 'src/disabling/disabling.dart' show DisablingFormTrigger;
+export 'src/field_trigger/field_trigger.dart' show FieldTrigger;
+export 'src/trigger/trigger.dart' show Trigger;
+export 'src/trigger_mixin.dart';

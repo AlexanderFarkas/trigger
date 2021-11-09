@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:trigger/trigger.dart';
 
 class SignUpFormNotifier extends ChangeNotifier {
-  VfReproduce<String> emailApiErrorVf;
-  MultiVfExpel invalidateFormVf;
+  ReproducingFieldTrigger<String> emailApiErrorTrigger;
+  InvalidatingFormTrigger turnOffValidationTrigger;
 
   bool isSubmitting = false;
 
   SignUpFormNotifier({
-    this.emailApiErrorVf = const VfReproduce.sealed(),
-    this.invalidateFormVf = const MultiVfExpel.sealed(),
+    this.emailApiErrorTrigger = const ReproducingFieldTrigger.sealed(),
+    this.turnOffValidationTrigger = const InvalidatingFormTrigger.disabled(),
   });
 
   void invalidateForm() {
-    invalidateFormVf = MultiVfExpel();
+    turnOffValidationTrigger = InvalidatingFormTrigger();
     notifyListeners();
   }
 
@@ -21,14 +21,14 @@ class SignUpFormNotifier extends ChangeNotifier {
     isSubmitting = true;
     notifyListeners();
     await Future.delayed(Duration(seconds: 1));
-    emailApiErrorVf = VfReproduce("Email already exists");
+    emailApiErrorTrigger = ReproducingFieldTrigger("Email already exists");
     isSubmitting = false;
     notifyListeners();
   }
 
   String? validateEmail(String? email) {
-    final emailApiError = emailApiErrorVf.access(email);
-    final isInvalidated = invalidateFormVf.access(email, fieldId: "email");
+    final emailApiError = emailApiErrorTrigger.access(email);
+    final isInvalidated = turnOffValidationTrigger.access(email, fieldId: "email");
 
     if (isInvalidated) {
       return null;
@@ -49,7 +49,7 @@ class SignUpFormNotifier extends ChangeNotifier {
   }
 
   String? validatePassword(String? password) {
-    if (invalidateFormVf.access(password, fieldId: "password")) {
+    if (turnOffValidationTrigger.access(password, fieldId: "password")) {
       return null;
     } else if (password == null || password.length < 8) {
       return "Too short";
@@ -59,7 +59,7 @@ class SignUpFormNotifier extends ChangeNotifier {
   }
 
   String? validateConfirmedPassword(String? confirmedPassword, String? password) {
-    if (invalidateFormVf.access(password, fieldId: "password-confirm")) {
+    if (turnOffValidationTrigger.access(password, fieldId: "password-confirm")) {
       return null;
     } else if (password != confirmedPassword) {
       return "Passwords should be equal";
