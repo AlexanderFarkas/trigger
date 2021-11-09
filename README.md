@@ -1,5 +1,9 @@
 <p align="center">
+<<<<<<< HEAD
 <img src="https://raw.githubusercontent.com/AlexanderFarkas/trigger/master/docs/assets/logo_with_name.svg" height="140" alt="Trigger logo" />
+=======
+<img src="https://raw.githubusercontent.com/AlexandrFarkas/trigger/master/docs/assets/logo_with_name.svg" height="140" alt="Trigger logo" />
+>>>>>>> master
 </p>
 
 ## Trigger
