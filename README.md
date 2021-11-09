@@ -1,8 +1,8 @@
 <p align="center">
-<img src="https://raw.githubusercontent.com/AlexandrFarkas/valform/master/docs/assets/logo_with_name.svg" height="140" alt="Valform" />
+<img src="https://raw.githubusercontent.com/AlexanderFarkas/trigger/master/docs/assets/logo_with_name.svg" height="140" alt="Trigger logo" />
 </p>
 
-## Valform
+## Trigger
 
 Boilerplate-free form validation library.
 
@@ -10,7 +10,7 @@ Boilerplate-free form validation library.
 
 - [Why?](#why)
   - [Why not Formz?](#why_not_formz)
-  - [Why Valform?](#why_valform)
+  - [Why Trigger?](#why_trigger)
 - [Getting started](#getting_started)
 - [Simple Usage](#simple_usage)
 - [Inspiration](#inspiration)
@@ -27,7 +27,7 @@ But it can't be done in Flutter. State is inevitably stored in TextEditingContro
 
 When I use formz, I always find myself copy-pasting form inputs and struggling with simple use cases.
 
-### <a name="why_valform">Why Valform?</a>
+### <a name="why_trigger">Why Trigger?</a>
 
 - Minimalistic.
 - Perfectly fits flutter's form handling system.
