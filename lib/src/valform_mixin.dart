@@ -1,4 +1,4 @@
-import 'package:valform/src/valform/valform.dart';
+import 'valform/valform.dart';
 
 mixin ValformMixin {
   List<Valform> get valforms;

@@ -1,4 +1,4 @@
-import 'package:valform/src/valform/single_field_valform.dart';
+import '../valform/single_field_valform.dart';
 
 mixin SingleFieldValformSealed<T> implements SingleFieldValform<T> {
   @override

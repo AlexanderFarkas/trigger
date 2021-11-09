@@ -1,4 +1,4 @@
-import 'package:valform/src/valform/multi_field_valform_impl.dart';
+import '../valform/multi_field_valform_impl.dart';
 
 class VfSealImpl<T> extends MultiFieldValformImpl<T> {
   VfSealImpl([T? value]) : super(value, _onInvalidKey);

@@ -1,7 +1,7 @@
-import 'package:valform/src/common/multi_field_valform_sealed.dart';
-import 'package:valform/src/common/multi_field_valform_wrapper.dart';
-import 'package:valform/src/common/single_field_valform_sealed.dart';
-import 'package:valform/src/common/single_field_valform_wrapper.dart';
+import '../common/multi_field_valform_sealed.dart';
+import '../common/multi_field_valform_wrapper.dart';
+import '../common/single_field_valform_sealed.dart';
+import '../common/single_field_valform_wrapper.dart';
 
 import 'expel_impl.dart';
 

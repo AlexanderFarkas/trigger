@@ -1,5 +1,5 @@
-import 'package:valform/src/common/single_field_valform_sealed.dart';
-import 'package:valform/src/seal/seal.dart';
+import '../common/single_field_valform_sealed.dart';
+import '../seal/seal.dart';
 
 class Vf<T> extends VfSeal<T> {
   Vf([T? value]) : super(value);

@@ -1,8 +1,7 @@
-import 'package:valform/src/common/multi_field_valform_sealed.dart';
-import 'package:valform/src/common/multi_field_valform_wrapper.dart';
-import 'package:valform/src/common/single_field_valform_sealed.dart';
-import 'package:valform/src/common/single_field_valform_wrapper.dart';
-
+import '../common/multi_field_valform_sealed.dart';
+import '../common/multi_field_valform_wrapper.dart';
+import '../common/single_field_valform_sealed.dart';
+import '../common/single_field_valform_wrapper.dart';
 import 'seal_impl.dart';
 
 class _MultiSealed<T> with MultiFieldValformSealed<T> implements MultiVfSeal<T> {

@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:valform/src/valform/multi_field_valform.dart';
-import 'package:valform/src/valform/multi_field_valform_impl.dart';
+import '../valform/multi_field_valform.dart';
+import '../valform/multi_field_valform_impl.dart';
 
 abstract class MultiFieldValformWrapper<T> implements MultiFieldValform<T> {
   @protected

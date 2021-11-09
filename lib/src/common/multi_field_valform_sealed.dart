@@ -1,4 +1,4 @@
-import 'package:valform/src/valform/multi_field_valform.dart';
+import '../valform/multi_field_valform.dart';
 
 mixin MultiFieldValformSealed<T> implements MultiFieldValform<T> {
   @override

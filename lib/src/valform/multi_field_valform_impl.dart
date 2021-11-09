@@ -1,4 +1,4 @@
-import 'package:valform/src/valform/multi_field_valform.dart';
+import 'multi_field_valform.dart';
 
 class InvalidKeyDetails {
   final dynamic key;
