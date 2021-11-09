@@ -1,6 +1,7 @@
 import 'package:example/change_notifier/sign_up_form_notifier.dart';
-import 'package:example/common/sign_up_form.dart';
 import 'package:flutter/material.dart';
+
+import 'common/sign_up_form.dart';
 
 class ChangeNotifierForm extends StatefulWidget {
   const ChangeNotifierForm({Key? key}) : super(key: key);
@@ -15,6 +16,12 @@ class _ChangeNotifierFormState extends State<ChangeNotifierForm> {
     ..addListener(() {
       if (mounted) setState(() {});
     });
+
+  @override
+  void dispose() {
+    notifier.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
