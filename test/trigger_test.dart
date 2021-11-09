@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:valform/src/valform/multi_field_valform.dart';
-import 'package:valform/valform.dart';
+import 'package:trigger/src/valform/multi_field_valform.dart';
+import 'package:trigger/trigger.dart';
 
 void main() {
   group("Typed", () {

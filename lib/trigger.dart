@@ -1,7 +1,7 @@
 /// Support for doing something awesome.
 ///
 /// More dartdocs go here.
-library valform;
+library trigger;
 
 export 'src/expel/expel.dart' show MultiVfExpel, VfExpel;
 export 'src/reproduce/reproduce.dart' show MultiVfReproduce, VfReproduce;

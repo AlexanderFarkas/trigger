@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:valform/valform.dart';
+import 'package:trigger/trigger.dart';
 
 class SignUpForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;

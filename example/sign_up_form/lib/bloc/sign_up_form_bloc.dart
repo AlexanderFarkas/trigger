@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:valform/valform.dart';
+import 'package:trigger/trigger.dart';
 
 part 'sign_up_form_event.dart';
 part 'sign_up_form_state.dart';
