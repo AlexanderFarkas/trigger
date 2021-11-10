@@ -1,12 +1,12 @@
 import 'base_form_trigger.dart';
 
-class InvalidKeyDetails {
+class FieldDidBecomeValidDetails {
   final dynamic fieldValue;
   final dynamic ownerId;
   final Map fields;
   final Function() disable;
 
-  InvalidKeyDetails({
+  FieldDidBecomeValidDetails({
     required this.fieldValue,
     required this.ownerId,
     required this.fields,
@@ -16,21 +16,20 @@ class InvalidKeyDetails {
 
 const defaultFieldId = Object();
 
-typedef OnInvalidKey = void Function(InvalidKeyDetails);
+typedef FieldDidBecomeValid = void Function(FieldDidBecomeValidDetails);
 
 abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
-
   // Triger value - first value after trigger was enabled
   final _fieldsToTriggerValue = {};
   final T? _content;
 
   bool _isDisabled;
 
-  final OnInvalidKey? _handler;
+  final FieldDidBecomeValid? _handler;
 
   FormTriggerImpl([
     T? content,
-    OnInvalidKey? handler,
+    FieldDidBecomeValid? handler,
   ])  : _content = content,
         _handler = handler,
         _isDisabled = false;
@@ -42,15 +41,21 @@ abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
 
   @override
   T? access(fieldValue, {required fieldId}) {
-    final isAllowed = _checkValidity(fieldValue, fieldId) && !_isDisabled;
+    setDefault(fieldValue, fieldId: fieldId);
+    final isValid = _didFieldBecomeValid(
+      fieldValue,
+      fieldId,
+      fieldDidBecomeValid: _handler,
+    );
+
     if (T == dynamic && _content == null) {
-      if (isAllowed) {
+      if (isValid) {
         return true as T;
       } else {
         return false as T;
       }
     } else {
-      if (isAllowed) {
+      if (isValid) {
         return _content;
       } else {
         return null;
@@ -58,24 +63,34 @@ abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
     }
   }
 
-  bool _checkValidity(fieldValue, fieldId) {
-    final savedKey = _fieldsToTriggerValue[fieldId];
-    if (savedKey == null) {
-      _fieldsToTriggerValue[fieldId] = fieldValue;
-    }
+  @override
+  bool isValid(fieldValue, {required fieldId}) {
+    return _didFieldBecomeValid(
+      fieldValue,
+      fieldId,
+    );
+  }
 
-    final handler = _handler;
+  bool _didFieldBecomeValid(fieldValue, fieldId, {FieldDidBecomeValid? fieldDidBecomeValid}) {
     if (_fieldsToTriggerValue[fieldId] != fieldValue) {
-      handler?.call(InvalidKeyDetails(
+      fieldDidBecomeValid?.call(FieldDidBecomeValidDetails(
         fieldValue: fieldValue,
         ownerId: fieldId,
         fields: _fieldsToTriggerValue,
         disable: () => _isDisabled = true,
       ));
 
-      return false;
+      return true;
     }
-    return !_isDisabled;
+    return _isDisabled;
+  }
+
+  @override
+  void setDefault(fieldValue, {required fieldId}) {
+    final savedKey = _fieldsToTriggerValue[fieldId];
+    if (savedKey == null) {
+      _fieldsToTriggerValue[fieldId] = fieldValue;
+    }
   }
 
   @override
@@ -83,6 +98,7 @@ abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
     return identical(this, other) ||
         other is FormTriggerImpl &&
             runtimeType == other.runtimeType
+
             /// Only sealed valforms are considered equal to each other
             &&
             (isDisabled && other.isDisabled);

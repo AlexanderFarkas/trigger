@@ -9,7 +9,7 @@ class SignUpForm extends StatefulWidget {
   final bool isSubmitting;
 
   final VoidCallback onSubmit;
-  final VoidCallback onInvalidate;
+  final VoidCallback didValidationTurnOff;
 
   const SignUpForm({
     Key? key,
@@ -18,7 +18,7 @@ class SignUpForm extends StatefulWidget {
     required this.validatePassword,
     required this.validateConfirmedPassword,
     required this.onSubmit,
-    required this.onInvalidate,
+    required this.didValidationTurnOff,
     required this.isSubmitting,
   }) : super(key: key);
 
@@ -69,7 +69,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: widget.onInvalidate,
+                        onPressed: widget.didValidationTurnOff,
                         child: const Text("Invalidate"),
                       ),
                     ),

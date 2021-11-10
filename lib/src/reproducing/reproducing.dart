@@ -15,10 +15,10 @@ class _FieldDisabled<T> with FieldTriggerDisabled<T> implements ReproducingField
 
 class ReproducingFormTrigger<T> extends FormTriggerWrapper<T> {
   ReproducingFormTrigger([T? value]) : super(ReproducingFormTriggerImpl(value));
-  const factory ReproducingFormTrigger.sealed() = _FormDisabled;
+  const factory ReproducingFormTrigger.disabled() = _FormDisabled;
 }
 
 class ReproducingFieldTrigger<T> extends FieldTriggerWrapper<T> {
   ReproducingFieldTrigger([T? value]) : super(ReproducingFormTriggerImpl(value));
-  const factory ReproducingFieldTrigger.sealed() = _FieldDisabled;
+  const factory ReproducingFieldTrigger.disabled() = _FieldDisabled;
 }

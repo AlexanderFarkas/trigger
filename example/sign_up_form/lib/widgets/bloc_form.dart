@@ -40,7 +40,7 @@ class _BlocFormState extends State<BlocForm> {
         },
         builder: (context, state) => SignUpForm(
           formKey: _formKey,
-          onInvalidate: () => context.read<SignUpFormBloc>().add(InvalidateSignUpFormEvent()),
+          didValidationTurnOff: () => context.read<SignUpFormBloc>().add(TurnOffValidationSignUpFormEvent()),
           onSubmit: () => context.read<SignUpFormBloc>().add(SubmitSignUpFormEvent()),
           isSubmitting: state.isSubmitting,
           validateConfirmedPassword: state.validateConfirmedPassword,

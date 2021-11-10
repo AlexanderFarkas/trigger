@@ -1,3 +1,6 @@
+import 'package:meta/meta.dart';
+
+import '../validators.dart';
 import 'trigger/trigger.dart';
 
 mixin TriggerMixin {

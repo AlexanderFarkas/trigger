@@ -30,10 +30,10 @@ void expellingValform<T>({
   required absence,
   required bool passContentToConstructor,
 }) {
-  InvalidatingFormTrigger<T> vf = InvalidatingFormTrigger.disabled();
+  FormTrigger<T> vf = FormTrigger.disabled();
   expect(vf.accessAsFirst(), equals(absence));
 
-  vf = InvalidatingFormTrigger(passContentToConstructor ? content : null);
+  vf = FormTrigger(passContentToConstructor ? content : null);
   expect(vf.accessAsFirst(), equals(content));
   expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst("another"), equals(absence));
@@ -48,7 +48,7 @@ void reproduceValform<T>({
   required absence,
   required bool passContentToConstructor,
 }) {
-  ReproducingFormTrigger<T> vf = ReproducingFormTrigger.sealed();
+  ReproducingFormTrigger<T> vf = ReproducingFormTrigger.disabled();
   expect(vf.accessAsFirst(), equals(absence));
 
   vf = ReproducingFormTrigger(passContentToConstructor ? content : null);
@@ -73,27 +73,27 @@ void sealValform<T>({
   expect(vf.accessAsFirst(), equals(content));
   expect(vf.isDisabled, equals(false));
   expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isDisabled, equals(false));
+  expect(vf.isDisabled, equals(true));
   expect(vf.accessAsFirst(), equals(absence));
 
   expect(vf.accessAsSecond(), equals(absence));
 
 }
 
-void vf<T>({
-  required T content,
-  required absence,
-  required bool passContentToConstructor,
-}) {
-  FieldTrigger<T> vf = FieldTrigger.disabled();
-  expect(vf.access("Help"), equals(absence));
+// void vf<T>({
+//   required T content,
+//   required absence,
+//   required bool passContentToConstructor,
+// }) {
+//   FieldTrigger<T> vf = FieldTrigger.disabled();
+//   expect(vf.access("Help"), equals(absence));
 
-  vf = FieldTrigger(passContentToConstructor ? content : null);
-  expect(vf.access("Help"), equals(content));
-  expect(vf.isDisabled, equals(false));
-  expect(vf.access("key"), equals(absence));
-  expect(vf.isDisabled, equals(true));
-}
+//   vf = FieldTrigger(passContentToConstructor ? content : null);
+//   expect(vf.access("Help"), equals(content));
+//   expect(vf.isDisabled, equals(false));
+//   expect(vf.access("key"), equals(absence));
+//   expect(vf.isDisabled, equals(true));
+// }
 
 
 extension MultiValformX<T> on BaseFormTrigger<T> {

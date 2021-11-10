@@ -38,10 +38,10 @@ When I use formz, I always find myself copy-pasting form inputs and struggling w
 **Use case**: We want to validate that email doesn't exist in our database. If it does, display error.
 ```dart
 class LoginFormState extends ChangeNotifier {
-  Vf _emailAlreadyExists;
+  FieldTrigger _emailAlreadyExistsTg;
 
   LoginFormState([
-    this._emailAlreadyExists = const VfReproduce.sealed()
+    this._emailAlreadyExistsTg = const FieldTrigger.sealed()
   ]);
 
   String? validateEmail(String? email) {
@@ -54,7 +54,7 @@ class LoginFormState extends ChangeNotifier {
 
   Future<void> submit() {
     await Future.delayed(Duration(seconds: 1)); // access the database
-    _emailAlreadyExists = Vf();
+    _emailAlreadyExistsTg = FieldTrigger();
     notifyListeners();
   }
 }
@@ -81,7 +81,7 @@ Widget build(BuildContext context) => Column(
 );
 
 ```
-
+# <a name="getting_started"></a>
 # <a name="inspiration">Inspiration</a>
 
 The whole work was inspired by event concept in [async_redux](https://pub.dev/packages/async_redux), created by [Marcelo Glasberg](https://github.com/marcglasberg).

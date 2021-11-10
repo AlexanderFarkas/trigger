@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 import '../trigger/base_field_trigger.dart';
 
 mixin FieldTriggerDisabled<T> implements BaseFieldTrigger<T> {
@@ -9,6 +11,14 @@ mixin FieldTriggerDisabled<T> implements BaseFieldTrigger<T> {
       return null;
     }
   }
+
+  @internal
+  @override
+  bool isValid(value) => false;
+
+  @internal
+  @override
+  void setDefault(value) {}
 
   @override
   bool get isEnabled => false;

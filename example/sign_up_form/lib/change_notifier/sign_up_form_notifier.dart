@@ -3,17 +3,17 @@ import 'package:trigger/trigger.dart';
 
 class SignUpFormNotifier extends ChangeNotifier {
   ReproducingFieldTrigger<String> emailApiErrorTrigger;
-  InvalidatingFormTrigger turnOffValidationTrigger;
+  FormTrigger turnOffValidationTrigger;
 
   bool isSubmitting = false;
 
   SignUpFormNotifier({
-    this.emailApiErrorTrigger = const ReproducingFieldTrigger.sealed(),
-    this.turnOffValidationTrigger = const InvalidatingFormTrigger.disabled(),
+    this.emailApiErrorTrigger = const ReproducingFieldTrigger.disabled(),
+    this.turnOffValidationTrigger = const FormTrigger.disabled(),
   });
 
-  void invalidateForm() {
-    turnOffValidationTrigger = InvalidatingFormTrigger();
+  void turnOffValidation() {
+    turnOffValidationTrigger = FormTrigger();
     notifyListeners();
   }
 

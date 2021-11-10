@@ -14,6 +14,14 @@ abstract class FieldTriggerWrapper<T> implements BaseFieldTrigger<T> {
     return _impl.access(key, fieldId: defaultFieldId);
   }
 
+  @internal
+  @override
+  bool isValid(value) => _impl.isValid(value, fieldId: defaultFieldId);
+
+  @internal
+  @override
+  void setDefault(value) => _impl.setDefault(value, fieldId: defaultFieldId);
+
   @override
   bool get isEnabled => _impl.isEnabled;
 

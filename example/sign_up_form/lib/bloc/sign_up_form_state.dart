@@ -2,7 +2,7 @@ part of 'sign_up_form_bloc.dart';
 
 class SignUpFormState with TriggerMixin {
   final ReproducingFieldTrigger<String> emailApiErrorTg;
-  final InvalidatingFormTrigger turnOffValidationTg;
+  final FormTrigger turnOffValidationTg;
 
   @override
   List<Trigger> get triggers => [emailApiErrorTg, turnOffValidationTg];
@@ -11,8 +11,8 @@ class SignUpFormState with TriggerMixin {
 
   SignUpFormState({
     required this.isSubmitting,
-    this.emailApiErrorTg = const ReproducingFieldTrigger.sealed(),
-    this.turnOffValidationTg = const InvalidatingFormTrigger.disabled(),
+    this.emailApiErrorTg = const ReproducingFieldTrigger.disabled(),
+    this.turnOffValidationTg = const FormTrigger.disabled(),
   });
 
   factory SignUpFormState.initialState() => SignUpFormState(
@@ -22,7 +22,7 @@ class SignUpFormState with TriggerMixin {
   SignUpFormState copyWith({
     bool? isSubmitting,
     ReproducingFieldTrigger<String>? emailApiErrorTg,
-    InvalidatingFormTrigger? turnOffValidationTg,
+    FormTrigger? turnOffValidationTg,
   }) {
     return SignUpFormState(
       isSubmitting: isSubmitting ?? this.isSubmitting,

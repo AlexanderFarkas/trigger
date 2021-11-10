@@ -27,7 +27,7 @@ class _ChangeNotifierFormState extends State<ChangeNotifierForm> {
   Widget build(BuildContext context) {
     return SignUpForm(
       formKey: formKey,
-      onInvalidate: notifier.invalidateForm,
+      didValidationTurnOff: notifier.turnOffValidation,
       onSubmit: notifier.submitForm,
       isSubmitting: notifier.isSubmitting,
       validateConfirmedPassword: notifier.validateConfirmedPassword,

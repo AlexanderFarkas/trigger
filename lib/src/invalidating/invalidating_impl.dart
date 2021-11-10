@@ -4,10 +4,10 @@ import 'invalidating.dart';
 
 const _expelled = Object();
 
-class InvalidatingFormTriggerImpl<T> extends FormTriggerImpl<T> implements InvalidatingFormTrigger<T> {
+class InvalidatingFormTriggerImpl<T> extends FormTriggerImpl<T> implements FormTrigger<T> {
   InvalidatingFormTriggerImpl([T? value]) : super(value, _onInvalidKey);
 
-  static void _onInvalidKey(InvalidKeyDetails details) {
+  static void _onInvalidKey(FieldDidBecomeValidDetails details) {
     details.fields[details.ownerId] = _expelled;
   }
 }
