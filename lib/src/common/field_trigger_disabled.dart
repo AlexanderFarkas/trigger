@@ -1,11 +1,12 @@
 import 'package:meta/meta.dart';
 
+import '../../trigger.dart';
 import '../trigger/base_field_trigger.dart';
 
 mixin FieldTriggerDisabled<T> implements BaseFieldTrigger<T> {
   @override
   access(key) {
-    if (T == dynamic) {
+    if (Trigger.shouldUseBooleans<T?>(null)) {
       return false as T;
     } else {
       return null;

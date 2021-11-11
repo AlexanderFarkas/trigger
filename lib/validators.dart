@@ -22,7 +22,7 @@ class ValidationPipeline<T> {
   ValidationPipeline._(this._value, this._validators);
   ValidationPipeline(this._value) : _validators = Queue();
 
-  ValidationPipeline<T> untriggered<K>(
+  ValidationPipeline<T> willNotTrigger<K>(
     BaseFieldTrigger<K> trigger, {
     required TriggerErrorBuilder<K> errorBuilder,
   }) {
@@ -38,7 +38,7 @@ class ValidationPipeline<T> {
     return this;
   }
 
-  ValidationPipeline<T> formUntriggered<K>(
+  ValidationPipeline<T> willNotTriggerForm<K>(
     BaseFormTrigger<K> trigger, {
     required fieldId,
     required TriggerErrorBuilder<K> errorBuilder,

@@ -1,4 +1,5 @@
 import 'base_form_trigger.dart';
+import 'trigger.dart';
 
 class FieldDidBecomeValidDetails {
   final dynamic fieldValue;
@@ -48,17 +49,17 @@ abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
       fieldDidBecomeValid: _handler,
     );
 
-    if (T == dynamic && _content == null) {
+    if (Trigger.shouldUseBooleans(_content)) {
       if (isValid) {
-        return true as T;
-      } else {
         return false as T;
+      } else {
+        return true as T;
       }
     } else {
       if (isValid) {
-        return _content;
-      } else {
         return null;
+      } else {
+        return _content;
       }
     }
   }
