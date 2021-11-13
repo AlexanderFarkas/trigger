@@ -19,7 +19,7 @@ const defaultFieldId = Object();
 
 typedef FieldDidBecomeValid = void Function(FieldDidBecomeValidDetails);
 
-abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
+abstract class FormTriggerImpl<T extends Object> implements BaseFormTrigger<T> {
   // Triger value - first value after trigger was enabled
   final _fieldsToTriggerValue = {};
   final T? _content;
@@ -49,7 +49,7 @@ abstract class FormTriggerImpl<T> implements BaseFormTrigger<T> {
       fieldDidBecomeValid: _handler,
     );
 
-    if (Trigger.shouldUseBooleans(_content)) {
+    if (Trigger.shouldUseBooleans<T>()) {
       if (isValid) {
         return false as T;
       } else {

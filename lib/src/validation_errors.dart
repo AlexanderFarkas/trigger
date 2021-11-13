@@ -9,4 +9,5 @@ class ValidationErrors {
   String minLength(int minimumLength) => "Minimum length: $minimumLength";
   String maxLength(int maximumLength) => "Maximum length: $maximumLength";
   String email() => "Email is not valid";
+  String defaultError() => "Something went wrong";
 }

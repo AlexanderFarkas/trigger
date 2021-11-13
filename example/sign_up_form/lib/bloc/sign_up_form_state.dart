@@ -1,8 +1,8 @@
 part of 'sign_up_form_bloc.dart';
 
-class SignUpFormState with TriggerMixin {
+class SignUpFormState with TriggerMixin, ValidatorMixin {
   final ReproducingFieldTrigger<String> emailApiErrorTg;
-  final FormTrigger turnOffValidationTg;
+  final FormBoolTrigger turnOffValidationTg;
 
   @override
   List<Trigger> get triggers => [emailApiErrorTg, turnOffValidationTg];
@@ -12,7 +12,7 @@ class SignUpFormState with TriggerMixin {
   SignUpFormState({
     required this.isSubmitting,
     this.emailApiErrorTg = const ReproducingFieldTrigger.disabled(),
-    this.turnOffValidationTg = const FormTrigger.disabled(),
+    this.turnOffValidationTg = const FormBoolTrigger.disabled(),
   });
 
   factory SignUpFormState.initialState() => SignUpFormState(
@@ -22,7 +22,7 @@ class SignUpFormState with TriggerMixin {
   SignUpFormState copyWith({
     bool? isSubmitting,
     ReproducingFieldTrigger<String>? emailApiErrorTg,
-    FormTrigger? turnOffValidationTg,
+    FormBoolTrigger? turnOffValidationTg,
   }) {
     return SignUpFormState(
       isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -32,44 +32,25 @@ class SignUpFormState with TriggerMixin {
   }
 
   String? validateEmail(String? email) {
-    final emailApiError = emailApiErrorTg.access(email);
-    final isInvalidated = turnOffValidationTg.access(email, fieldId: "email");
-
-    if (isInvalidated) {
-      return null;
-    } else if (emailApiError != null) {
-      return emailApiError;
-    } else if (email != null) {
-      const errorText = "Incorrect format";
-      if (email.contains("@")) {
-        final split = email.split("@");
-        return split.length == 2 &&
-                split.every((element) => !element.contains("@") & element.isNotEmpty)
-            ? null
-            : errorText;
-      }
-      return errorText;
-    }
-    return null;
+    return validate(email)
+        .notNull(error: "WTF")
+        .endIfValid((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'email'))
+        .isValidatedBy<String>(emailApiErrorTg, errorBuilder: (error) => error)
+        .isEmail()();
   }
 
   String? validatePassword(String? password) {
-    if (turnOffValidationTg.access(password, fieldId: "password")) {
-      return null;
-    } else if (password == null || password.length < 8) {
-      return "Too short";
-    } else {
-      return null;
-    }
+    return validate(password)
+        .notNull(error: "WTF")
+        .endIfValid((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'password'))
+        .minLength(8)();
   }
 
   String? validateConfirmedPassword(String? confirmedPassword, String? password) {
-    if (turnOffValidationTg.access(password, fieldId: "password-confirm")) {
-      return null;
-    } else if (password != confirmedPassword) {
-      return "Passwords should be equal";
-    } else {
-      return null;
-    }
+    return validate(confirmedPassword)
+        .notNull(error: "WTF")
+        .endIfValid(
+            (v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'confirm-password'))
+        .equals(password, error: "Passwords should be equal")();
   }
 }

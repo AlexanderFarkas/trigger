@@ -8,10 +8,10 @@ typedef Pipe<T> = ValidationPipeline<T>;
 void main() {
   const validated = null;
 
-  group("min length", () {
+  group("Min length", () {
     const error = "error";
 
-    test("logic", () {
+    test("Logic", () {
       expect(Pipe("").minLength(0, error: error)(), equals(validated));
       expect(Pipe("").minLength(1, error: error)(), equals(error));
       expect(Pipe("😑😒").minLength(1, error: error)(), equals(validated));
@@ -25,7 +25,7 @@ void main() {
       expect(Pipe("help").minLength(5, error: error)(), equals(error));
     });
 
-    test("default errors", () {
+    test("Default errors", () {
       const falseCriteria = 1;
       const value = "";
       expect(
@@ -38,10 +38,10 @@ void main() {
       );
     });
   });
-  group("max length", () {
+  group("Max length", () {
     const error = "error";
 
-    test("logic", () {
+    test("Logic", () {
       expect(Pipe("").maxLength(0, error: error)(), equals(validated));
       expect(Pipe("").maxLength(1, error: error)(), equals(validated));
       expect(Pipe("😑😒").maxLength(1, error: error)(), equals(error));
@@ -55,7 +55,7 @@ void main() {
       expect(Pipe("help").maxLength(5, error: error)(), equals(validated));
     });
 
-    test("default errors", () {
+    test("Default errors", () {
       const falseCriteria = 0;
       const value = "A";
       expect(
@@ -69,7 +69,7 @@ void main() {
     });
   });
 
-  test("minmax length", () {
+  test("Minmax length", () {
     const errorMin = "errorMin";
     const errorMax = "errorMax";
 
@@ -83,8 +83,8 @@ void main() {
     );
   });
 
-  group("email", () {
-    test("valid", () {
+  group("Email", () {
+    test("Valid", () {
       final valid = [
         r'simple@example.com',
         r'very.common@example.com',
@@ -121,7 +121,7 @@ void main() {
       }
     });
 
-    test("invalid", () {
+    test("Invalid", () {
       final invalid = [
         r'plainaddress',
         r'@d.r',
@@ -138,7 +138,7 @@ void main() {
       }
     });
 
-    test("default errors", () {
+    test("Default errors", () {
       const value = "A";
       const error = "Email error";
       expect(
@@ -152,16 +152,50 @@ void main() {
     });
   });
 
-  group("triggers", () {
-    final reproduceTrigger = ReproducingFieldTrigger();
+  group("Triggers", () {
     const triggerError = "1";
-    // expect(
-    //     Pipe("s@.ru")
-    //         .willNotTrigger(reproduceTrigger, errorBuilder: (_) => triggerError)
-    //         .isEmail()(),
-    //     equals(null));
+
+    test("Reproducing", () {
+      var reproduceTrigger = ReproducingFieldTrigger<String>(triggerError);
+
+      pipe([String value = "s@.ru"]) => Pipe(value)
+          .isValidatedBy<String>(
+            reproduceTrigger,
+            errorBuilder: (error) => error,
+          )
+          .isEmail();
+
+      expect(pipe()(), equals(triggerError));
+      reproduceTrigger = ReproducingFieldTrigger.disabled();
+      expect(pipe()(), equals(ValidationErrors.instance.email()));
+      expect(pipe("s@d.ru")(), equals(null));
+      expect(pipe()(), equals(ValidationErrors.instance.email()));
+    });
+    test("Disabling", () {
+      var disablingTg = FieldTrigger<String>(triggerError);
+
+      pipe([String value = "s@.ru"]) => Pipe(value)
+          .isValidatedBy<String>(
+            disablingTg,
+            errorBuilder: (error) => error,
+          )
+          .isEmail();
+
+      expect(pipe()(), equals(triggerError));
+      expect(pipe("s@d.ru")(), equals(null));
+      expect(pipe()(), equals(ValidationErrors.instance.email()));
+    });
   });
-  test("custom", () {
+
+  test("Nullable", () {
+    String? value = "value";
+    expect(Pipe(value).notNull(error: "Null").minLength(5)(), equals(null));
+    value = null;
+
+    expect(Pipe(value).notNull(error: "Null").minLength(5)(), equals("Null"));
+  });
+
+  test("Custom", () {
     const error = "error";
     validator(value) => value.length < 3 ? error : null;
 

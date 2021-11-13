@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:trigger/trigger.dart';
+import 'package:trigger/validators.dart';
 
-class SignUpFormNotifier extends ChangeNotifier {
+class SignUpFormNotifier extends ChangeNotifier with ValidatorMixin {
   ReproducingFieldTrigger<String> emailApiErrorTrigger;
-  FormTrigger turnOffValidationTrigger;
+  FormBoolTrigger turnOffValidationTrigger;
 
   bool isSubmitting = false;
 
   SignUpFormNotifier({
     this.emailApiErrorTrigger = const ReproducingFieldTrigger.disabled(),
-    this.turnOffValidationTrigger = const FormTrigger.disabled(),
+    this.turnOffValidationTrigger = const FormBoolTrigger.disabled(),
   });
 
   void turnOffValidation() {
-    turnOffValidationTrigger = FormTrigger();
+    turnOffValidationTrigger = FormBoolTrigger();
     notifyListeners();
   }
 
@@ -29,6 +30,8 @@ class SignUpFormNotifier extends ChangeNotifier {
   String? validateEmail(String? email) {
     final emailApiError = emailApiErrorTrigger.access(email);
     final isInvalidated = turnOffValidationTrigger.access(email, fieldId: "email");
+
+    validate(email).notNull(error: "WTF").isEmail();
 
     if (isInvalidated) {
       return null;

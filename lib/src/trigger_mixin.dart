@@ -1,11 +1,9 @@
-import 'package:meta/meta.dart';
-
-import '../validators.dart';
+import 'dart:collection';
 import 'trigger/trigger.dart';
 
 mixin TriggerMixin {
   List<Trigger> get triggers;
 
-  bool anyTriggerEnabled() => triggers.any((element) => element.isEnabled);
+  bool shouldValidate() => triggers.any((element) => element.isEnabled);
   bool allTriggersDisabled() => triggers.every((element) => element.isDisabled);
 }

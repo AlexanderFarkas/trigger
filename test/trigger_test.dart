@@ -4,99 +4,233 @@ import 'package:trigger/trigger.dart';
 
 void main() {
   group("Typed", () {
-    test('Single Seal Valform', () => runTyped);
-    test('Expelling Valform', () => runTyped(expellingValform));
-    test('Reproduce Valform', () => runTyped(reproduceValform));
-    test('Seal Valform', () => runTyped(sealValform));
+    const absence = null;
+    const content = "Error";
+
+    group("Form", () {
+      test('Invalidating', () {
+        FormTrigger<String> tg = FormTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = FormTrigger(content);
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst(), equals(absence));
+
+        expect(tg.accessAsSecond(), equals(content));
+      });
+      test('Reproducing', () {
+        ReproducingFormTrigger<String> tg = ReproducingFormTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = ReproducingFormTrigger(content);
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst(), equals(content));
+
+        expect(tg.accessAsSecond(), equals(content));
+      });
+      test('Disabling', () {
+        DisablingFormTrigger<String> vf = DisablingFormTrigger.disabled();
+        expect(vf.accessAsFirst(), equals(absence));
+
+        vf = DisablingFormTrigger(content);
+        expect(vf.accessAsFirst(), equals(content));
+        expect(vf.isDisabled, equals(false));
+        expect(vf.accessAsFirst("another"), equals(absence));
+        expect(vf.isDisabled, equals(true));
+        expect(vf.accessAsFirst(), equals(absence));
+
+        expect(vf.accessAsSecond(), equals(absence));
+      });
+    });
+    group("Field", () {
+      const first = "Value";
+      const second = "Value2";
+
+      test('Disabling', () {
+        FieldTrigger<String> tg = FieldTrigger.disabled();
+        expect(tg.access(first), equals(absence));
+
+        tg = FieldTrigger(content);
+        expect(tg.access(first), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(second), equals(absence));
+        expect(tg.isDisabled, equals(true));
+        expect(tg.access(first), equals(absence));
+      });
+      test('Reproducing', () {
+        ReproducingFieldTrigger<String> tg = ReproducingFieldTrigger.disabled();
+        expect(tg.access(first), equals(absence));
+
+        tg = ReproducingFieldTrigger(content);
+        expect(tg.access(first), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(second), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(first), equals(content));
+      });
+    });
   });
 
-  group("Dynamic", () {
-    test('Expelling Valform', () => runDynamic(expellingValform));
-    test('Reproduce Valform', () => runDynamic(reproduceValform));
-    test('Seal Valform', () => runDynamic(sealValform));
+  group("Typed by boolean", () {
+    const absence = false;
+    const content = true;
+
+    group("Form", () {
+      test('Invalidating', () {
+        FormTrigger<bool> tg = FormTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = FormTrigger(content);
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst(), equals(absence));
+
+        expect(tg.accessAsSecond(), equals(content));
+      });
+      test('Reproducing', () {
+        ReproducingFormTrigger<bool> tg = ReproducingFormTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = ReproducingFormTrigger(content);
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst(), equals(content));
+
+        expect(tg.accessAsSecond(), equals(content));
+      });
+      test('Disabling', () {
+        DisablingFormTrigger<bool> vf = DisablingFormTrigger.disabled();
+        expect(vf.accessAsFirst(), equals(absence));
+
+        vf = DisablingFormTrigger(content);
+        expect(vf.accessAsFirst(), equals(content));
+        expect(vf.isDisabled, equals(false));
+        expect(vf.accessAsFirst("another"), equals(absence));
+        expect(vf.isDisabled, equals(true));
+        expect(vf.accessAsFirst(), equals(absence));
+
+        expect(vf.accessAsSecond(), equals(absence));
+      });
+    });
+    group("Field", () {
+      const first = "Value";
+      const second = "Value2";
+
+      test('Disabling', () {
+        FieldTrigger<bool> tg = FieldTrigger.disabled();
+        expect(tg.access(first), equals(absence));
+
+        tg = FieldTrigger(content);
+        expect(tg.access(first), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(second), equals(absence));
+        expect(tg.isDisabled, equals(true));
+        expect(tg.access(first), equals(absence));
+      });
+      test('Reproducing', () {
+        ReproducingFieldTrigger<bool> tg = ReproducingFieldTrigger.disabled();
+        expect(tg.access(first), equals(absence));
+
+        tg = ReproducingFieldTrigger(content);
+        expect(tg.access(first), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(second), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(first), equals(content));
+      });
+    });
+  });
+  group("Boolean", () {
+    const absence = false;
+    const content = true;
+
+    group("Form", () {
+      test('Invalidating', () {
+        FormBoolTrigger tg = FormBoolTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = FormBoolTrigger();
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst(), equals(absence));
+
+        expect(tg.accessAsSecond(), equals(content));
+      });
+      test('Reproducing', () {
+        ReproducingFormBoolTrigger tg = ReproducingFormBoolTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = ReproducingFormBoolTrigger();
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst(), equals(content));
+
+        expect(tg.accessAsSecond(), equals(content));
+      });
+      test('Disabling', () {
+        DisablingFormBoolTrigger tg = DisablingFormBoolTrigger.disabled();
+        expect(tg.accessAsFirst(), equals(absence));
+
+        tg = DisablingFormBoolTrigger();
+        expect(tg.accessAsFirst(), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.accessAsFirst("another"), equals(absence));
+        expect(tg.isDisabled, equals(true));
+        expect(tg.accessAsFirst(), equals(absence));
+
+        expect(tg.accessAsSecond(), equals(absence));
+      });
+    });
+    group("Field", () {
+      const first = "Value";
+      const second = "Value2";
+
+      test('Disabling', () {
+        FieldBoolTrigger tg = FieldBoolTrigger.disabled();
+        expect(tg.access(first), equals(absence));
+
+        tg = FieldBoolTrigger();
+        expect(tg.access(first), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(second), equals(absence));
+        expect(tg.isDisabled, equals(true));
+        expect(tg.access(first), equals(absence));
+      });
+      test('Reproducing', () {
+        ReproducingFieldBoolTrigger tg = ReproducingFieldBoolTrigger.disabled();
+        expect(tg.access(first), equals(absence));
+
+        tg = ReproducingFieldBoolTrigger();
+        expect(tg.access(first), equals(content));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(second), equals(absence));
+        expect(tg.isDisabled, equals(false));
+        expect(tg.access(first), equals(content));
+      });
+    });
   });
 }
 
-typedef ValformTest = void Function<T>(
-    {required T content, required dynamic absence, required bool passContentToConstructor});
-
-void runTyped(ValformTest testedValform) =>
-    testedValform(content: "Error", absence: null, passContentToConstructor: true);
-void runDynamic(ValformTest testedValform) =>
-    testedValform<dynamic>(content: true, absence: false, passContentToConstructor: false);
-
-void expellingValform<T>({
-  required T content,
-  required absence,
-  required bool passContentToConstructor,
-}) {
-  FormTrigger<T> vf = FormTrigger.disabled();
-  expect(vf.accessAsFirst(), equals(absence));
-
-  vf = FormTrigger(passContentToConstructor ? content : null);
-  expect(vf.accessAsFirst(), equals(content));
-  expect(vf.isDisabled, equals(false));
-  expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isDisabled, equals(false));
-  expect(vf.accessAsFirst(), equals(absence));
-
-  expect(vf.accessAsSecond(), equals(content));
+extension FormTriggerX<T extends Object> on BaseFormTrigger<T> {
+  accessAsFirst([key = 'key']) => access(key, fieldId: "first");
+  accessAsSecond([key = 'key']) => access(key, fieldId: "second");
 }
 
-void reproduceValform<T>({
-  required T content,
-  required absence,
-  required bool passContentToConstructor,
-}) {
-  ReproducingFormTrigger<T> vf = ReproducingFormTrigger.disabled();
-  expect(vf.accessAsFirst(), equals(absence));
-
-  vf = ReproducingFormTrigger(passContentToConstructor ? content : null);
-  expect(vf.accessAsFirst(), equals(content));
-  expect(vf.isDisabled, equals(false));
-  expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isDisabled, equals(false));
-  expect(vf.accessAsFirst(), equals(content));
-
-  expect(vf.accessAsSecond(), equals(content));
-}
-
-void sealValform<T>({
-  required T content,
-  required absence,
-  required bool passContentToConstructor,
-}) {
-  DisablingFormTrigger<T> vf = DisablingFormTrigger.disabled();
-  expect(vf.accessAsFirst(), equals(absence));
-
-  vf = DisablingFormTrigger(passContentToConstructor ? content : null);
-  expect(vf.accessAsFirst(), equals(content));
-  expect(vf.isDisabled, equals(false));
-  expect(vf.accessAsFirst("another"), equals(absence));
-  expect(vf.isDisabled, equals(true));
-  expect(vf.accessAsFirst(), equals(absence));
-
-  expect(vf.accessAsSecond(), equals(absence));
-
-}
-
-// void vf<T>({
-//   required T content,
-//   required absence,
-//   required bool passContentToConstructor,
-// }) {
-//   FieldTrigger<T> vf = FieldTrigger.disabled();
-//   expect(vf.access("Help"), equals(absence));
-
-//   vf = FieldTrigger(passContentToConstructor ? content : null);
-//   expect(vf.access("Help"), equals(content));
-//   expect(vf.isDisabled, equals(false));
-//   expect(vf.access("key"), equals(absence));
-//   expect(vf.isDisabled, equals(true));
-// }
-
-
-extension MultiValformX<T> on BaseFormTrigger<T> {
+extension FormBoolTriggerX on BaseFormBoolTrigger {
   accessAsFirst([key = 'key']) => access(key, fieldId: "first");
   accessAsSecond([key = 'key']) => access(key, fieldId: "second");
 }

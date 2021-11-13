@@ -37,19 +37,17 @@ When I use formz, I always find myself copy-pasting form inputs and struggling w
 
 **Use case**: We want to validate that email doesn't exist in our database. If it does, display error.
 ```dart
-class LoginFormState extends ChangeNotifier {
-  FieldTrigger _emailAlreadyExistsTg;
+class LoginFormState extends ChangeNotifier with ValidationMixin {
+  FieldBoolTrigger _emailAlreadyExistsTg;
 
   LoginFormState([
-    this._emailAlreadyExistsTg = const FieldTrigger.sealed()
+    this._emailAlreadyExistsTg = const FieldBoolTrigger.disabled()
   ]);
 
   String? validateEmail(String? email) {
-    if (_emailAlreadyExists.access(email)) {
-      return "Email already exists";
-    }
-
-    return null;
+    return validate(email)
+      .isValidatedByBool(_emailAlreadyExistsTg)
+      .isEmail()();
   }
 
   Future<void> submit() {
