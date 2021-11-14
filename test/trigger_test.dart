@@ -234,3 +234,10 @@ extension FormBoolTriggerX on BaseFormBoolTrigger {
   accessAsFirst([key = 'key']) => access(key, fieldId: "first");
   accessAsSecond([key = 'key']) => access(key, fieldId: "second");
 }
+
+///dart```
+/// 
+/// Widget build(BuildContext context)  {
+///   final int a;
+/// }
+///```

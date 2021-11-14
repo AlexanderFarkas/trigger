@@ -34,23 +34,21 @@ class SignUpFormState with TriggerMixin, ValidatorMixin {
   String? validateEmail(String? email) {
     return validate(email)
         .notNull(error: "WTF")
-        .endIfValid((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'email'))
+        .endIf((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'email'))
         .isValidatedBy<String>(emailApiErrorTg, errorBuilder: (error) => error)
         .isEmail()();
   }
 
   String? validatePassword(String? password) {
-    return validate(password)
-        .notNull(error: "WTF")
-        .endIfValid((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'password'))
+    return validate(password!) // Example without notNull
+        .endIf((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'password'))
         .minLength(8)();
   }
 
   String? validateConfirmedPassword(String? confirmedPassword, String? password) {
     return validate(confirmedPassword)
         .notNull(error: "WTF")
-        .endIfValid(
-            (v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'confirm-password'))
+        .endIf((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'confirm-password'))
         .equals(password, error: "Passwords should be equal")();
   }
 }

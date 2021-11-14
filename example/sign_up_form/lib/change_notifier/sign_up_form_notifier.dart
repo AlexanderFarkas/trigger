@@ -3,18 +3,18 @@ import 'package:trigger/trigger.dart';
 import 'package:trigger/validators.dart';
 
 class SignUpFormNotifier extends ChangeNotifier with ValidatorMixin {
-  ReproducingFieldTrigger<String> emailApiErrorTrigger;
-  FormBoolTrigger turnOffValidationTrigger;
+  ReproducingFieldTrigger<String> emailApiErrorTg;
+  FormBoolTrigger turnOffValidationTg;
 
   bool isSubmitting = false;
 
   SignUpFormNotifier({
-    this.emailApiErrorTrigger = const ReproducingFieldTrigger.disabled(),
-    this.turnOffValidationTrigger = const FormBoolTrigger.disabled(),
+    this.emailApiErrorTg = const ReproducingFieldTrigger.disabled(),
+    this.turnOffValidationTg = const FormBoolTrigger.disabled(),
   });
 
   void turnOffValidation() {
-    turnOffValidationTrigger = FormBoolTrigger();
+    turnOffValidationTg = FormBoolTrigger();
     notifyListeners();
   }
 
@@ -22,52 +22,29 @@ class SignUpFormNotifier extends ChangeNotifier with ValidatorMixin {
     isSubmitting = true;
     notifyListeners();
     await Future.delayed(Duration(seconds: 1));
-    emailApiErrorTrigger = ReproducingFieldTrigger("Email already exists");
+    emailApiErrorTg = ReproducingFieldTrigger("Email already exists");
     isSubmitting = false;
     notifyListeners();
   }
 
   String? validateEmail(String? email) {
-    final emailApiError = emailApiErrorTrigger.access(email);
-    final isInvalidated = turnOffValidationTrigger.access(email, fieldId: "email");
-
-    validate(email).notNull(error: "WTF").isEmail();
-
-    if (isInvalidated) {
-      return null;
-    } else if (emailApiError != null) {
-      return emailApiError;
-    } else if (email != null) {
-      const errorText = "Incorrect format";
-      if (email.contains("@")) {
-        final split = email.split("@");
-        return split.length == 2 &&
-                split.every((element) => !element.contains("@") & element.isNotEmpty)
-            ? null
-            : errorText;
-      }
-      return errorText;
-    }
-    return null;
+    return validate(email)
+        .notNull(error: "WTF")
+        .endIf((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'email'))
+        .isValidatedBy<String>(emailApiErrorTg, errorBuilder: (error) => error)
+        .isEmail()();
   }
 
   String? validatePassword(String? password) {
-    if (turnOffValidationTrigger.access(password, fieldId: "password")) {
-      return null;
-    } else if (password == null || password.length < 8) {
-      return "Too short";
-    } else {
-      return null;
-    }
+    return validate(password!) // Example without notNull
+        .endIf((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'password'))
+        .minLength(8)();
   }
 
   String? validateConfirmedPassword(String? confirmedPassword, String? password) {
-    if (turnOffValidationTrigger.access(password, fieldId: "password-confirm")) {
-      return null;
-    } else if (password != confirmedPassword) {
-      return "Passwords should be equal";
-    } else {
-      return null;
-    }
+    return validate(confirmedPassword)
+        .notNull(error: "WTF")
+        .endIf((v) => v.isNotValidatedByFormBool(turnOffValidationTg, fieldId: 'confirm-password'))
+        .equals(password, error: "Passwords should be equal")();
   }
 }

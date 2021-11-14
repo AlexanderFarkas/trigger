@@ -219,7 +219,7 @@ class ValidationPipeline<T> {
     return this;
   }
 
-  ValidationPipeline<T> endIfValid(_PipelineBuilder<T> pipelineBuilder) => _withStrategy(
+  ValidationPipeline<T> endIf(_PipelineBuilder<T> pipelineBuilder) => _withStrategy(
         pipelineBuilder,
         onValid: OnValidStrategy.breakAndValidate,
         onError: OnErrorStrategy.next,
